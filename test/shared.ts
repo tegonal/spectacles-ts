@@ -37,3 +37,8 @@ export const data: Data = {
     e: false,
   }),
 };
+
+export interface DataWithRecords {
+  record: Record<string, number>;
+  recordWithKeys: Record<"r1" | "r2", number>;
+}

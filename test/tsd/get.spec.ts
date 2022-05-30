@@ -4,7 +4,7 @@ import * as O from "fp-ts/Option";
 import * as Eq from "fp-ts/Eq";
 import { Eq as StringEq } from "fp-ts/string";
 import { get } from "../../src/values/get";
-import { data, simpleData } from "../shared";
+import { data, DataWithRecords, simpleData } from "../shared";
 
 // gets a definite value
 const definite = pipe(simpleData, get("a.b.[1]"));
@@ -19,6 +19,16 @@ expectError<O.Option<never>>(optional);
 const record = { a: 123 } as Record<string, number>;
 const picked2 = pipe(record, get("[string]", "b"));
 expectType<O.Option<number>>(picked2);
+
+// can traverse records
+const records = {
+  record: { a: 123 },
+  recordWithKeys: { r1: 124, r2: 125 },
+} as DataWithRecords;
+const traverseRecord = pipe(records, get("record.{}>"));
+const traverseRecordWithKeys = pipe(records, get("recordWithKeys.{}>"));
+expectType<Record<string, number>>(traverseRecord);
+expectType<Record<string, number>>(traverseRecordWithKeys);
 
 // can traverse arrays
 const traverseArray = pipe([{ a: 123 }, { a: 456 }], get("[]>.a"));
