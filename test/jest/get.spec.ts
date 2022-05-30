@@ -31,6 +31,10 @@ describe("get", () => {
     const traverseRecord = pipe({ b: { z: 456 }, a: { z: 123 } } as Record<string, { z: number }>, get("{}>.z"));
     assert.deepStrictEqual(traverseRecord, [123, 456]);
   });
+  it("can traverse records with fixed Keys", () => {
+    const traverseRecord = pipe({ b: { z: 456 }, a: { z: 123 } } as Record<"a" | "b", { z: number }>, get("{}>.z"));
+    assert.deepStrictEqual(traverseRecord, [123, 456]);
+  });
   it("gets an optional value", () => {
     const a = { a: 123 } as { a: number | undefined };
     const optional = pipe(a, get("a?"));
